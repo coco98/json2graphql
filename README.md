@@ -29,8 +29,8 @@ Import JSON data to Postgres and get GraphQL APIs
           { id: 456, name: "Jane Doe" }
       ],
       comments: [
-          { id: 987, post_id: 1, body: "Consectetur adipiscing elit", date: new Date('2017-07-03') },
-          { id: 995, post_id: 1, body: "Nam molestie pellentesque dui", date: new Date('2017-08-17') }
+          { id: 987, post_id: 1, body: "Consectetur adipiscing elit" },
+          { id: 995, post_id: 1, body: "Nam molestie pellentesque dui" }
       ]
   }
   ```
