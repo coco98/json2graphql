@@ -60,15 +60,13 @@ const createRelationships = async (tables) => {
   };
   relationships.objectRelationships.forEach((or) => bulkQuery.args.push(or));
   relationships.arrayRelationships.forEach((ar) => bulkQuery.args.push(ar));
-  const resp = await fetch(
+  await fetch(
     `${graphqlEngineUrl}/v1/query`,
     {
       method: 'POST',
       body: JSON.stringify(bulkQuery)
     }
   );
-  const respObj = await resp.json();
-  console.log(respObj);
 };
 
 module.exports = {

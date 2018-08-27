@@ -2,7 +2,7 @@
 
 Import JSON data to Postgres and get GraphQL APIs
 
-Workflow:
+## Workflow
 
 1. Deploy Hasura GraphQL Engine to Heroku free tier.
 
@@ -42,3 +42,11 @@ Workflow:
   ```
 
 4. You can head to your graphql engine URL and try out the newly imported data and schema :-)
+
+## Notes
+
+1. Only int, float, text and boolean are supported. All fields are nullable.
+2. Data types are inferred from the data. Therefore, if null is provided as data for a field, it is assumed to be text.
+3. Every table must have an integer primary key called 'id'.
+4. If any table has a key `something_id`, it is assumed a foreign key to a the column `id` of table `something` + `s` if it exists . If `somethings` does not exist, something_id is assumed to be a normal column.
+5. All foreign keys are converted to relationships.
