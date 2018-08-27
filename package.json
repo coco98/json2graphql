@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "graphqurl": "^0.3.0",
+    "node-fetch": "^2.2.0"
   },
   "devDependencies": {
     "esm": "^3.0.80"
