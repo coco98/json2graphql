@@ -2,12 +2,12 @@ const fetch = require('node-fetch');
 const throwError = require('./error');
 const graphqlEngineUrl = process.env.GRAPHQL_ENGINE_URL || 'http://localhost:8080';
 
-const runSql = (sqlArray) => {
+const runSql = async (sqlArray) => {
   let sqlString = '';
   sqlArray.forEach((sql) => {
     sqlString += sql;
   });
-  fetch(
+  await fetch(
     `${graphqlEngineUrl}/v1/query`,
     {
       method: 'POST',
@@ -19,11 +19,7 @@ const runSql = (sqlArray) => {
         }
       })
     }
-  ).then((resp) => resp.json().then((respObj) => {
-    console.log(respObj);
-  })).catch((error) => {
-    throwError(error);
-  });
+  );
 };
 
 const generateSql = (metadata) => {
@@ -57,7 +53,7 @@ const generateConstraintsSql = (metadata) => {
   metadata.forEach((table) => {
     table.columns.forEach((column) => {
       if (column.isForeign) {
-        const fkSql = `add foreign key ("${column.name}") references public.${column.name.substring(0, column.name.length-3)} ("id");`;
+        const fkSql = `add foreign key ("${column.name}") references public.${column.name.substring(0, column.name.length-3)}s ("id");`;
         sqlArray.push(`alter table ${table.name} ${fkSql}`);
       }
     });

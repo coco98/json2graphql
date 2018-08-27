@@ -12,7 +12,7 @@ const generate = (db) => {
     tableMetadata['dependencies'] = [];
     tableMetadata.columns.forEach((column) => {
       if (column.isForeign) {
-        tableMetadata['dependencies'].push(column.name.substring(0, column.name.length - 3));
+        tableMetadata['dependencies'].push(column.name.substring(0, column.name.length - 3) + 's');
       }
     });
     metaData.push(tableMetadata);
@@ -64,7 +64,7 @@ const isForeign = (name, db) => {
   if (l > 3) {
     if (name.substring(l-3, l) === '_id' &&
         Object.keys(db).find((tableName) => {
-          return tableName === name.substring(0, l -3);
+          return tableName === name.substring(0, l -3) + 's';
         })) {
       return true;
     }

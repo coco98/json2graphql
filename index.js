@@ -1,5 +1,6 @@
-const importData = require('./import');
+const importData = require('./src/import');
 
-const db = require('./db.js');
+const pathToDb = process.env.DB_PATH || './db.js';
+const db = require(pathToDb);
 
-importData(db);
+importData(db)

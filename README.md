@@ -1,0 +1,44 @@
+# JSON data import
+
+Import JSON data to Postgres and get GraphQL APIs
+
+Workflow:
+
+1. Deploy Hasura GraphQL Engine to Heroku free tier.
+
+   [![Deploy to heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/hasura/graphql-engine-heroku)
+
+2. Clone this repo and install the dependencies
+
+  ```
+  git clone https://github.com/hasura/json-data-import
+  cd json-data-import
+  npm install
+  ```
+
+2. Create a `db.js` file. Your data file should export an object where the keys are the entity types. The values should be lists of entities, i.e. arrays of value objects with at least an id key. For instance:
+
+  ```js
+  module.exports = {
+      posts: [
+          { id: 1, title: "Lorem Ipsum", views: 254, user_id: 123 },
+          { id: 2, title: "Sic Dolor amet", views: 65, user_id: 456 },
+      ],
+      users: [
+          { id: 123, name: "John Doe" },
+          { id: 456, name: "Jane Doe" }
+      ],
+      comments: [
+          { id: 987, post_id: 1, body: "Consectetur adipiscing elit", date: new Date('2017-07-03') },
+          { id: 995, post_id: 1, body: "Nam molestie pellentesque dui", date: new Date('2017-08-17') }
+      ]
+  }
+  ```
+
+3. Run the script with the graphql engine URL and the path to your `db.js` as environment variables
+
+  ```js
+  GRAPHQL_ENGINE_URL='https://myapp.herokuapp.com' DB_PATH='./db.js' node index.js
+  ```
+
+4. You can head to your graphql engine URL and try out the newly imported data and schema :-)
