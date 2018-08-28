@@ -52,7 +52,7 @@ const getDataType = (data, column, db) => {
   if (typeof data === 'string' || data === null) {
     return "text";
   }
-  if (data.constructor.name === 'boolean') {
+  if (typeof data === 'boolean') {
     return 'boolean';
   }
   throwError(`invalid data type given for column ${column}: ${typeof data}`);

@@ -49,7 +49,7 @@ const insertData = (insertOrder, sampleData) => {
           console.log(JSON.stringify(response.data, null, 2));
           makeQuery(i+1);
         },
-        (error) => console.error(error)
+        (error) => console.error(JSON.stringify(error, null, 2))
       );
     };
   };
