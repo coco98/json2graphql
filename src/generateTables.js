@@ -21,7 +21,18 @@ const generate = (db) => {
 };
 
 const getColumnData = (dataArray, db) => {
-  const refColumns = dataArray[0];
+
+  const refRow = {
+    numOfCols: 0,
+    index: 0
+  }
+  dataArray.forEach((row, i) => {
+    if (Object.keys(row).length > refRow.numOfCols) {
+      refRow.numOfCols = Object.keys(row).length;
+      refRow.index = i;
+    }
+  });
+  const refColumns = dataArray[refRow.index];
   const columnData = [];
   const foreignKeys = [];
   Object.keys(refColumns).forEach((column) => {

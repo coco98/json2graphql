@@ -1,8 +1,8 @@
 const db = {
     users: [
-        { id: 1, name: 'Fredi Bach', country: 'CH', birthday: '1975-09-03', sex: 'm', email: 'osxcode@gmail.com', userStatus_id: 2, date: '2018-06-22', file_id: 1 },
+        { id: 1, name: 'Fredi Bach', country: 'CH', birthday: '1975-09-03', sex: 'm', email: 'osxcode@gmail.com', userStatus_id: 2, date: '2018-06-22' },
         { id: 2, name: 'Samuel Patzen', country: 'CH', birthday: '1978-02-01', sex: 'm', email: 'patzen@bluewin.ch', userStatus_id: 2, date: '2018-07-01' },
-        { id: 3, name: 'Hans Muster', country: 'CH', birthday: '1978-02-01', sex: 'm', email: 'hans.muster@domain.ch', userStatus_id: 1, date: '2018-04-01' }
+        { id: 3, name: 'Hans Muster', country: 'CH', birthday: '1978-02-01', sex: 'm', email: 'hans.muster@domain.ch', userStatus_id: 1, date: '2018-04-01'}
     ],
     userStatuses: [
         { id: 1, key: 'inactive' },
@@ -13,8 +13,8 @@ const db = {
         { id: 1, user_id: 1 }
     ],
     leagues: [
-        { id: 1, name: 'Switzerland', yearly: true, description: 'Waypoint are all placed in Switzerland by local instructors and top pilots.', created: '2018-05-01', seasonStart: '10-01', seasonEnd: '09-31', file_id: 2 },
-        { id: 2, name: 'Austria', yearly: true, description: 'Waypoint are all placed in Austria by local instructors and top pilots.', created: '2018-05-02', seasonStart: '10-01', seasonEnd: '09-31', file_id: 2 },
+        { id: 1, name: 'Switzerland', yearly: true, description: 'Waypoint are all placed in Switzerland by local instructors and top pilots.', created: '2018-05-01', seasonStart: '10-01', seasonEnd: '09-31' },
+        { id: 2, name: 'Austria', yearly: true, description: 'Waypoint are all placed in Austria by local instructors and top pilots.', created: '2018-05-02', seasonStart: '10-01', seasonEnd: '09-31' },
         { id: 3, name: 'Vol Liber Grischun Clubmeisterschaft', yearly: false, created: '2018-05-02', seasonStart: '2018-10-01', seasonEnd: '2048-10-01' }
     ],
     userLeagues: [

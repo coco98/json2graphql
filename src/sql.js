@@ -7,7 +7,7 @@ const runSql = async (sqlArray) => {
   sqlArray.forEach((sql) => {
     sqlString += sql;
   });
-  await fetch(
+  const resp = await fetch(
     `${graphqlEngineUrl}/v1/query`,
     {
       method: 'POST',
@@ -15,11 +15,15 @@ const runSql = async (sqlArray) => {
         type: 'run_sql',
         args: {
           sql: sqlString,
-          cascade: false
+          cascade: true
         }
       })
     }
   );
+  if (resp.status !== 200) {
+    const error = await resp.json();
+    throw error;
+  } 
 };
 
 const generateSql = (metadata) => {
@@ -32,7 +36,7 @@ const generateSql = (metadata) => {
 const generateCreateTableSql = (metadata) => {
   const sqlArray = [];
   metadata.forEach((table) => {
-    sqlArray.push(`drop table if exists public.${table.name} cascade;`);
+    sqlArray.push(`drop table if exists public."${table.name}" cascade;`);
     let columnSql = '(';
     table.columns.forEach((column, i) => {
       if (column.name === 'id') {
@@ -42,7 +46,7 @@ const generateCreateTableSql = (metadata) => {
       }
       columnSql += (table.columns.length === i+1) ? ' ) ' : ', ';
     });
-    const createTableSql = `create table public.${table.name} ${columnSql};`;
+    const createTableSql = `create table public."${table.name}" ${columnSql};`;
     sqlArray.push(createTableSql);
   });
   return sqlArray;
@@ -53,8 +57,8 @@ const generateConstraintsSql = (metadata) => {
   metadata.forEach((table) => {
     table.columns.forEach((column) => {
       if (column.isForeign) {
-        const fkSql = `add foreign key ("${column.name}") references public.${column.name.substring(0, column.name.length-3)}s ("id");`;
-        sqlArray.push(`alter table ${table.name} ${fkSql}`);
+        const fkSql = `add foreign key ("${column.name}") references public."${column.name.substring(0, column.name.length-3)}s" ("id");`;
+        sqlArray.push(`alter table public."${table.name}" ${fkSql}`);
       }
     });
   });

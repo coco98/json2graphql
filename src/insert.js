@@ -1,32 +1,33 @@
 const { query } = require('graphqurl');
 const graphqlEngineUrl = process.env.GRAPHQL_ENGINE_URL || 'http://localhost:8080';
 
-const getInsertOrder = (metadata) => {
+const getInsertOrder = (tables) => {
   let order = [];
-  const setOrder = (tablename) => {
-    const tableData = metadata.find((td) => td.name === tablename);
-    if (tableData.dependencies.length === 0 && !order.find((tn) => tn === tablename)) {
-      order.push(tablename);
+  const tablesHash = {};
+  tables.forEach((table) => {
+    tablesHash[table.name] = table;
+  });
+  pushedHash = {};
+  const setOrder = (table) => {
+    if (table.dependencies.length === 0) {
+      order.push(table.name);
+      pushedHash[table.name] = true;
     } else {
-      let allDepTablesPushed = true;
-      tableData.dependencies.forEach((tn) => {
-        if (!(order.find((pushedTn) => tn === pushedTn))) {
-          allDepTablesPushed = false;
-          setOrder(tn);
+      table.dependencies.forEach((parentTable) => {
+        if (!pushedHash[parentTable] && parentTable !== table.name) {
+          setOrder(tablesHash[parentTable]);
         }
       });
-      if (allDepTablesPushed && !order.find((tn) => tn === tablename)) {
-        order.push(tablename);
-      }
-    }
-    ; };
-  for (let i = 0; i < metadata.length; i++) {
-    let table = metadata[i].name;
-    setOrder(table);
-    if (!(order.find((tn) => tn === table))) {
-      order.push(table);
+      order.push(table.name);
+      pushedHash[table.name] = true;
     }
   }
+
+  tables.forEach((table) => {
+    if (!pushedHash[table.name]) {
+      setOrder(table);
+    }
+  });
   return order;
 };
 

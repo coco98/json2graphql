@@ -22,7 +22,7 @@ const importData = async (db) => {
         insertData(insertOrder, db);
       });
     });
-  }).catch((err) => throwError(err));
+  }).catch((err) => {throwError(err)});
 
 };
 

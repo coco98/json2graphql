@@ -18,13 +18,17 @@ const trackTables = async (tables) => {
     type: 'bulk',
     args: bulkQueryArgs
   };
-  await fetch(
+  const resp = await fetch(
     `${graphqlEngineUrl}/v1/query`,
     {
       method: 'POST',
       body: JSON.stringify(bulkQuery)
     }
   );
+  if (resp.status !== 200) {
+    const error = await resp.json();
+    throw error;
+  }
 };
 
 module.exports = {
