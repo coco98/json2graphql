@@ -43,6 +43,12 @@ Import JSON data to Postgres and get GraphQL APIs
 
 4. You can head to your graphql engine URL and try out the newly imported data and schema :-)
 
+5. Test with [graphqurl](https://github.com/hasura/graphqurl) to check if the GraphQL endpoint works:
+
+  ```
+  gq https://myapp.herokuapp.com/v1alpha1/graphql -q 'query { posts { id title views userByUsersId { id name } commentsByPostsId { id body } } }'
+  ```
+
 ## Notes
 
 1. Only int, float, text and boolean are supported. All fields are nullable.
