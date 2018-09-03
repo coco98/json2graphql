@@ -66,6 +66,9 @@ const getDataType = (data, column, db) => {
   if (typeof data === 'boolean') {
     return 'boolean';
   }
+  if (data.constructor.name === 'Date') {
+    return 'timestamptz';
+  }
   throwError(`invalid data type given for column ${column}: ${typeof data}`);
   return null;
 };

@@ -19,11 +19,10 @@ const importData = async (db) => {
         console.log('Done!');
         console.log('Inserting data...');
         const insertOrder = getInsertOrder(tables);
-        insertData(insertOrder, db);
+        insertData(insertOrder, db, tables);
       });
     });
   }).catch((err) => {throwError(err)});
-
 };
 
 module.exports = importData;

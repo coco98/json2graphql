@@ -1,5 +1,6 @@
 const { query } = require('graphqurl');
 const graphqlEngineUrl = process.env.GRAPHQL_ENGINE_URL || 'http://localhost:8080';
+const moment = require('moment');
 
 const getInsertOrder = (tables) => {
   let order = [];
@@ -32,12 +33,13 @@ const getInsertOrder = (tables) => {
 };
 
 
-const insertData = (insertOrder, sampleData) => {
+const insertData = (insertOrder, sampleData, tables) => {
+  const transformedData = transformData(sampleData, tables);
   const makeQuery = (i) => {
     if (i < insertOrder.length) {
       const mutation = `mutation ($objects: [${insertOrder[i]}_insert_input!]!) { insert_${insertOrder[i]} (objects: $objects) { returning { id }}}`;
       const variables = {
-        objects: sampleData[insertOrder[i]]
+        objects: transformedData[insertOrder[i]]
       };
       query(
         {
@@ -56,6 +58,24 @@ const insertData = (insertOrder, sampleData) => {
   };
   makeQuery(0);
 };
+
+const transformData = (data, tables) => {
+  const newData = {};
+  tables.forEach((table) => {
+    const tableData = data[table.name];
+    newData[table.name] = [];
+    tableData.forEach((row) => {
+      const newRow = { ...row };
+      table.columns.forEach((column) => {
+        if (column.type === 'timestamptz' && row[column.name]) {
+          newRow[column.name] = moment(row[column.name]).format();
+        }
+      })
+      newData[table.name].push(newRow);
+    });
+  });
+  return newData;
+}
 
 module.exports = {
   getInsertOrder,
