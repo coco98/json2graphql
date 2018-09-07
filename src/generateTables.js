@@ -69,6 +69,9 @@ const getDataType = (data, column, db) => {
   if (data.constructor.name === 'Date') {
     return 'timestamptz';
   }
+  if (data.constructor.name === 'Object') {
+    return 'json';
+  } 
   throwError(`invalid data type given for column ${column}: ${typeof data}`);
   return null;
 };
