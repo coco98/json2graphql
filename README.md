@@ -30,8 +30,8 @@ This is A CLI tool to import a schema and data to Postgres using JSON data. You 
 3. Use the CLI to import the data:
 
     ```
-    $ npm install -g json-to-graphql
-    $ json-to-graphql https://<app-name>.herokuapp.com --db=./path/to/db.js 
+    $ npm install -g json2graphql
+    $ json2graphql https://<app-name>.herokuapp.com --db=./path/to/db.js 
     ```
 
 4. That's it. You can go your HGE URL `https://<app-name>.herokuapp.com` and start querying this data over GraphQL:
@@ -57,7 +57,7 @@ Check [this section](#foreign-keys-and-relationships) for knowing about foreign 
 ### CLI
 
 ```bash
-npm install -g json-to-graphql
+npm install -g json2graphql
 ```
 
 ## Usage
@@ -67,13 +67,13 @@ npm install -g json-to-graphql
 #### Without access key
 
 ```
-$ json-to-graphql https://hge.herokuapp.com -d ./path/to/db.js
+$ json2graphql https://hge.herokuapp.com -d ./path/to/db.js
 ```
 
 #### With access key
 
 ```
-$ json-to-graphql https://hge.herokuapp.com -k <access-key> -d ./path/to/db.js
+$ json2graphql https://hge.herokuapp.com -k <access-key> -d ./path/to/db.js
 ```
 
 ### Command
@@ -121,7 +121,7 @@ module.exports = {
 Import the database:
 
 ```
-$ json-to-graphql https://<app-name>.herokuapp.com --db=./path/to/db.js
+$ json2graphql https://<app-name>.herokuapp.com --db=./path/to/db.js
 ```
 
 Now you can make complicated queries like:
@@ -146,7 +146,7 @@ query {
 
 ### Overwrite
 
-If your Postgres already contains tables that you are trying to import using `json-to-graphql`, the command will fail.
+If your Postgres already contains tables that you are trying to import using `json2graphql`, the command will fail.
 
 If you want to overwrite the the existing tables in the database with the new tables from your sample JSON database, you must provide a flag `-o` or `--overwrite`
 

@@ -3,23 +3,23 @@ const {CLIError} = require('@oclif/errors');
 const importData = require('./import/import');
 const resolve = require('path').resolve;
 
-class JSONDataImport extends Command {
+class JSON2GraphQL extends Command {
   async run() {
-    const {args, flags} = this.parse(JSONDataImport);
+    const {args, flags} = this.parse(JSON2GraphQL);
     const {url} = args;
     if (!url) {
-      throw new CLIError('endpoint is required: \'json-to-graphql <url>\'');
+      throw new CLIError('endpoint is required: \'json2graphql <url>\'');
     }
 
     const {db, overwrite} = flags;
     const key = flags['access-key'];
 
     if (!url) {
-      throw new CLIError('endpoint is required: \'json-to-graphql <url> -d ./db.js\'');
+      throw new CLIError('endpoint is required: \'json2graphql <url> -d ./db.js\'');
     }
     const safeUrl = this.getSafeUrl(url);
     if (!db) {
-      throw new CLIError('path to sample database is required: \'json-to-graphql <url> -d ./db.js\'');
+      throw new CLIError('path to sample database is required: \'json2graphql <url> -d ./db.js\'');
     }
     const dbJson = this.getDbJson(db);
     const headers = key ? {'x-hasura-access-key': key} : {};
@@ -40,20 +40,20 @@ class JSONDataImport extends Command {
   }
 }
 
-JSONDataImport.description = `JSON Data Import: Import JSON data to Hasura GraphQL Engine
+JSON2GraphQL.description = `JSON Data Import: Import JSON data to Hasura GraphQL Engine
 # Examples:
 
 # Import data from a JSON file to Hasura GraphQL Engine without access key
-json-to-graphql https://hge.herokuapp.com --db=./path/to/db.js
+json2graphql https://hge.herokuapp.com --db=./path/to/db.js
 
 # Make a query with CLI auto complete (this will show a gql prompt)
-json-to-graphql https://hge.herokuapp.com --access-key='<access-key>' --db=./path/to/db.js
+json2graphql https://hge.herokuapp.com --access-key='<access-key>' --db=./path/to/db.js
 
 `;
 
-JSONDataImport.usage = 'URL [-k KEY]';
+JSON2GraphQL.usage = 'URL [-k KEY]';
 
-JSONDataImport.flags = {
+JSON2GraphQL.flags = {
   // add --version flag to show CLI version
   version: flags.version(),
 
@@ -77,11 +77,11 @@ JSONDataImport.flags = {
   }),
 };
 
-JSONDataImport.args = [
+JSON2GraphQL.args = [
   {
     name: 'url',
     description: 'URL where Hasura GraphQL Engine is running',
   },
 ];
 
-module.exports = JSONDataImport;
+module.exports = JSON2GraphQL;
