@@ -8,48 +8,49 @@ This is A CLI tool to import a schema and data to Postgres using JSON data. You 
 
 1. Quickly get the GraphQL Engine running by clicking this button:
 
-[![Deploy to heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/hasura/graphql-engine-heroku)
+   [![Deploy to heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/hasura/graphql-engine-heroku)
 
   Note the URL. It will be of the form: `https://<app-name>.herokuapp.com`
 
 2. Create a db.js file. Your data file should export an object where the keys are the entity types. The values should be lists of entities, i.e. arrays of value objects with at least an id key. For instance:
 
-  ```js
-  module.exports = {
-      users: [
-          { id: 123, name: "John Doe" },
-          { id: 456, name: "Jane Doe" }
-      ],
-      cities: [
-          { id: 987, name: "Stockholm", country: "Sweden" },
-          { id: 995, name: "Sydney", country: "Australia" }
-      ]
-  }
-  ```
+    ```js
+    module.exports = {
+        users: [
+            { id: 123, name: "John Doe" },
+            { id: 456, name: "Jane Doe" }
+        ],
+        cities: [
+            { id: 987, name: "Stockholm", country: "Sweden" },
+            { id: 995, name: "Sydney", country: "Australia" }
+        ]
+    }
+    ```
 
 3. Use the CLI to import the data:
 
-  ```
-  $ json-to-graphql https://<app-name>.herokuapp.com --db=./path/to/db.js 
-  ```
+    ```
+    $ npm install -g json-to-graphql
+    $ json-to-graphql https://<app-name>.herokuapp.com --db=./path/to/db.js 
+    ```
 
 4. That's it. You can go your HGE URL `https://<app-name>.herokuapp.com` and start querying this data over GraphQL:
 
-  ```graphql
-  query {
-    users {
-      id
-      name
+    ```graphql
+    query {
+      users {
+        id
+        name
+      }
+      cities {
+        id
+        name
+        country
+      }
     }
-    cities {
-      id
-      name
-      country
-    }
-  }
-  ```
+    ```
 
-Check this section for knowing about foreign keys and relationships.
+Check [this section](#foreign-keys-and-relationships) for knowing about foreign keys and relationships.
 
 ## Installation
 
@@ -91,9 +92,6 @@ $ gq URL [flags]
 - `-o --overwrite`: Overwrite tables if they already exist in database
 - `-v --version`: show CLI version
 - `-h, --help`: show CLI help
-
----
-Maintained with ♡ by <a href="https://hasura.io">Hasura</a>
 
 ## More features
 
@@ -148,7 +146,9 @@ query {
 
 ### Overwrite
 
-If your Postgres already contains tables that you are trying to import using json-to-graphql, the command will fail.
+If your Postgres already contains tables that you are trying to import using `json-to-graphql`, the command will fail.
 
 If you want to overwrite the the existing tables in the database with the new tables from your sample JSON database, you must provide a flag `-o` or `--overwrite`
 
+---
+Maintained with ♡ by <a href="https://hasura.io">Hasura</a>
