@@ -8,24 +8,23 @@ class JSONDataImport extends Command {
     const {args, flags} = this.parse(JSONDataImport);
     const {url} = args;
     if (!url) {
-      throw new CLIError('endpoint is required: \'json-data-import <url>\'');
+      throw new CLIError('endpoint is required: \'json-to-graphql <url>\'');
     }
 
     const {db, overwrite} = flags;
     const key = flags['access-key'];
 
     if (!url) {
-      throw new CLIError('endpoint is required: \'json-data-import <url> -d ./db.js\'');
+      throw new CLIError('endpoint is required: \'json-to-graphql <url> -d ./db.js\'');
     }
+    const safeUrl = this.getSafeUrl(url);
     if (!db) {
-      throw new CLIError('path to sample database is required: \'json-data-import <url> -d ./db.js\'');
+      throw new CLIError('path to sample database is required: \'json-to-graphql <url> -d ./db.js\'');
     }
     const dbJson = this.getDbJson(db);
     const headers = key ? {'x-hasura-access-key': key} : {};
-    this.args = args;
-    this.flags = flags;
     try {
-      await importData(dbJson, url, headers, overwrite);
+      await importData(dbJson, safeUrl, headers, overwrite);
     } catch (e) {
       throw new CLIError('Error : ', e);
     }
@@ -34,16 +33,21 @@ class JSONDataImport extends Command {
   getDbJson(db) {
     return require(resolve(db));
   }
+
+  getSafeUrl(url) {
+    const urlLength = url.length;
+    return url[urlLength-1] === '/' ? url.slice (0, -1) : url
+  }
 }
 
 JSONDataImport.description = `JSON Data Import: Import JSON data to Hasura GraphQL Engine
 # Examples:
 
 # Import data from a JSON file to Hasura GraphQL Engine without access key
-json-data-import https://hge.herokuapp.com --db=./path/to/db.js
+json-to-graphql https://hge.herokuapp.com --db=./path/to/db.js
 
 # Make a query with CLI auto complete (this will show a gql prompt)
-json-data-import https://hge.herokuapp.com --access-key='<access-key>' --db=./path/to/db.js
+json-to-graphql https://hge.herokuapp.com --access-key='<access-key>' --db=./path/to/db.js
 
 `;
 

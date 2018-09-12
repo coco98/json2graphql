@@ -49,3 +49,13 @@ can quickly merge or address your contributions.
 
 
 (Credits: Some sections are adapted from https://github.com/PostgREST/postgrest/blob/master/.github/CONTRIBUTING.md)
+
+## Testing
+
+No pull request will be merged if it does not pass the tests.
+
+To run the tests locally, you will need an instance of [Hasura GraphQL Engine](https://github.com/hasura/graphql-engine) running. To run the tests, run the command:
+
+```
+$ TEST_HGE_URL=https://hge.herokuapp.com npm test
+```
