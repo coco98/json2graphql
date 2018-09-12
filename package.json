@@ -45,7 +45,8 @@
   "scripts": {
     "eslint": "eslint .",
     "eslintfix": "eslint . --fix",
-    "posttest": "npm run eslint"
+    "posttest": "npm run eslint",
+    "test": "cd test && ./test.sh"
   },
   "pre-commit": [
     "eslintfix"

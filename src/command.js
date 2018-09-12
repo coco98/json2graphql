@@ -1,5 +1,4 @@
 const {Command, flags} = require('@oclif/command');
-const {cli} = require('cli-ux');
 const {CLIError} = require('@oclif/errors');
 const importData = require('./import/import');
 const resolve = require('path').resolve;
@@ -7,30 +6,28 @@ const resolve = require('path').resolve;
 class JSONDataImport extends Command {
   async run() {
     const {args, flags} = this.parse(JSONDataImport);
-    const { url } = args;
-    console.log(args)
-    console.log(flags)
+    const {url} = args;
     if (!url) {
-      throw new CLIError(`endpoint is required: 'json-data-import <url>'`);
+      throw new CLIError('endpoint is required: \'json-data-import <url>\'');
     }
 
-    const { db, overwrite } = flags;
+    const {db, overwrite} = flags;
     const key = flags['access-key'];
 
     if (!url) {
-      throw new CLIError(`endpoint is required: 'json-data-import <url> -d ./db.js'`);
+      throw new CLIError('endpoint is required: \'json-data-import <url> -d ./db.js\'');
     }
     if (!db) {
-      throw new CLIError(`path to sample database is required: 'json-data-import <url> -d ./db.js'`);
+      throw new CLIError('path to sample database is required: \'json-data-import <url> -d ./db.js\'');
     }
     const dbJson = this.getDbJson(db);
-    const headers = key ? { 'x-hasura-access-key': key } : {};
+    const headers = key ? {'x-hasura-access-key': key} : {};
     this.args = args;
     this.flags = flags;
     try {
       await importData(dbJson, url, headers, overwrite);
     } catch (e) {
-      throw new CLIError(`Error : `, e);
+      throw new CLIError('Error : ', e);
     }
   }
 
@@ -62,18 +59,18 @@ JSONDataImport.flags = {
   // Access key to Hasura GraphQL Engine
   'access-key': flags.string({
     char: 'k',
-    description: 'Access key to Hasura GraphQL Engine (X-Hasura-Access-Key)'
+    description: 'Access key to Hasura GraphQL Engine (X-Hasura-Access-Key)',
   }),
 
   db: flags.string({
     char: 'd',
-    description: 'Path to the .js files that exports a JSON database'
+    description: 'Path to the .js files that exports a JSON database',
   }),
 
   overwrite: flags.boolean({
     char: 'o',
-    description: 'Overwrite tables if they exist'
-  })
+    description: 'Overwrite tables if they exist',
+  }),
 };
 
 JSONDataImport.args = [

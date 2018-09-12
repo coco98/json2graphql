@@ -1,10 +1,9 @@
 const fetch = require('node-fetch');
-const throwError = require('./error');
 const {CLIError} = require('@oclif/errors');
 
 const runSql = async (sqlArray, url, headers) => {
   let sqlString = '';
-  sqlArray.forEach((sql) => {
+  sqlArray.forEach(sql => {
     sqlString += sql;
   });
   const resp = await fetch(
@@ -15,10 +14,10 @@ const runSql = async (sqlArray, url, headers) => {
         type: 'run_sql',
         args: {
           sql: sqlString,
-          cascade: true
-        }
+          cascade: true,
+        },
       }),
-      headers
+      headers,
     }
   );
   if (resp.status !== 200) {
@@ -27,25 +26,18 @@ const runSql = async (sqlArray, url, headers) => {
   }
 };
 
-const generateSql = (metadata) => {
-  const createTableSql = generateCreateTableSql(metadata);
-  const constraintsSql = generateConstraintsSql(metadata);
-  let sqlArray = [ ...createTableSql, ...constraintsSql];
-  return sqlArray;
-};
-
-const generateCreateTableSql = (metadata) => {
+const generateCreateTableSql = metadata => {
   const sqlArray = [];
-  metadata.forEach((table) => {
+  metadata.forEach(table => {
     sqlArray.push(`drop table if exists public."${table.name}" cascade;`);
     let columnSql = '(';
     table.columns.forEach((column, i) => {
       if (column.name === 'id') {
-        columnSql += `"id" int not null primary key`;
+        columnSql += '"id" int not null primary key';
       } else {
         columnSql += `"${column.name}" ${column.type}`;
       }
-      columnSql += (table.columns.length === i+1) ? ' ) ' : ', ';
+      columnSql += (table.columns.length === i + 1) ? ' ) ' : ', ';
     });
     const createTableSql = `create table public."${table.name}" ${columnSql};`;
     sqlArray.push(createTableSql);
@@ -53,12 +45,12 @@ const generateCreateTableSql = (metadata) => {
   return sqlArray;
 };
 
-const generateConstraintsSql = (metadata) => {
+const generateConstraintsSql = metadata => {
   const sqlArray = [];
-  metadata.forEach((table) => {
-    table.columns.forEach((column) => {
+  metadata.forEach(table => {
+    table.columns.forEach(column => {
       if (column.isForeign) {
-        const fkSql = `add foreign key ("${column.name}") references public."${column.name.substring(0, column.name.length-3)}s" ("id");`;
+        const fkSql = `add foreign key ("${column.name}") references public."${column.name.substring(0, column.name.length - 3)}s" ("id");`;
         sqlArray.push(`alter table public."${table.name}" ${fkSql}`);
       }
     });
@@ -66,7 +58,14 @@ const generateConstraintsSql = (metadata) => {
   return sqlArray;
 };
 
+const generateSql = metadata => {
+  const createTableSql = generateCreateTableSql(metadata);
+  const constraintsSql = generateConstraintsSql(metadata);
+  let sqlArray = [...createTableSql, ...constraintsSql];
+  return sqlArray;
+};
+
 module.exports = {
   generateSql,
-  runSql
+  runSql,
 };
