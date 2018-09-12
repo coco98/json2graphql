@@ -2,7 +2,7 @@
 
 [Hasura GraphQL Engine](https://hasura.io) gives instant GraphQL APIs over Postgres.
 
-This is A CLI tool to import a schema to Postgres using simple JSON data
+This is A CLI tool to import a schema and data to Postgres using JSON data. You can then leverage all the features of Hasura GraphQL Engine to query the Postgres data over GraphQL.
 
 ## Quick start
 

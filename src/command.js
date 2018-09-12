@@ -36,7 +36,7 @@ class JSONDataImport extends Command {
 
   getSafeUrl(url) {
     const urlLength = url.length;
-    return url[urlLength-1] === '/' ? url.slice (0, -1) : url
+    return url[urlLength - 1] === '/' ? url.slice(0, -1) : url;
   }
 }
 
