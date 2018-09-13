@@ -67,7 +67,7 @@ const getColumnData = (dataArray, db) => {
 const hasPrimaryKey = dataObj => {
   let has = true;
   dataObj.forEach((obj) => {
-    if (Object.keys(obj).find(name => name === 'id')) {
+    if (!Object.keys(obj).find(name => name === 'id')) {
       has = false;
     }
   });
