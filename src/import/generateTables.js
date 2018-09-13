@@ -1,4 +1,5 @@
 const {CLIError} = require('@oclif/errors');
+const {cli} = require('cli-ux');
 
 const getDataType = (data, column) => {
   if (typeof data === 'number') {
