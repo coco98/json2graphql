@@ -65,10 +65,13 @@ const getColumnData = (dataArray, db) => {
 };
 
 const hasPrimaryKey = dataObj => {
-  if (Object.keys(dataObj[0]).find(name => name === 'id')) {
-    return true;
-  }
-  return false;
+  let has = true;
+  dataObj.forEach((obj) => {
+    if (Object.keys(obj).find(name => name === 'id')) {
+      has = false;
+    }
+  });
+  return has;
 };
 
 const generate = db => {
