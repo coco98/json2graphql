@@ -16,7 +16,9 @@ const getDataType = (data, column) => {
   if (data.constructor.name === 'Object') {
     return 'json';
   }
-  throw new CLIError(`invalid data type given for column ${column}: ${typeof data}`);
+  cli.action.stop('Error');
+  console.log(`Message: invalid data type given for column ${column}: ${typeof data}`);
+  process.exit(1);
 };
 
 const isForeign = (name, db) => {
@@ -48,7 +50,9 @@ const getColumnData = (dataArray, db) => {
   Object.keys(refColumns).forEach(column => {
     const columnMetadata = {};
     if (!column) {
-      throw new CLIError("column names can't be empty strings");
+      cli.action.stop('Error');
+      console.log("Message: column names can't be empty strings");
+      process.exit(1);
     }
     columnMetadata.name = column;
     const sampleData = refColumns[column];
@@ -71,7 +75,9 @@ const generate = db => {
   Object.keys(db).forEach(rootField => {
     const tableMetadata = {};
     if (!hasPrimaryKey(db[rootField], rootField)) {
-      throw new CLIError(`A unique column with name "id" and type integer must present in table "${rootField}"`);
+      cli.action.stop('Error');
+      console.log(`Message: A unique column with name "id" and type integer must present in table "${rootField}"`);
+      process.exit(1);
     }
     tableMetadata.name = rootField;
     tableMetadata.columns = getColumnData(db[rootField], db);

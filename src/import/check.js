@@ -1,30 +1,53 @@
-const {query} = require('graphqurl');
+const fetch = require('node-fetch');
 const {CLIError} = require('@oclif/errors');
 const {cli} = require('cli-ux');
 
 const createTables = async (tables, url, headers, overwrite, runSql, sql) => {
-  const checkTablePresence = async i => {
-    if (i < tables.length) {
-      const resp = await query({
-        endpoint: `${url}/v1alpha1/graphql`,
-        query: `query { ${tables[i].name} { id } }`,
-        headers,
-      });
-      if (resp.data) {
-        cli.action.stop('Error');
-        throw new CLIError('Your database contains table that already exist on postgres. Please use flag --overwrite to overwrite existing tables');
-      } else {
-        await checkTablePresence(i + 1);
-      }
-    }
-    if (i === tables.length) {
-      await runSql(sql, url, headers);
-    }
-  };
   if (overwrite) {
-    runSql(sql, url, headers);
+    cli.action.stop('Skipped!');
+    cli.action.start('Creating tables');
+    await runSql(sql, url, headers);
   } else {
-    checkTablePresence(0);
+    try {
+      const resp = await fetch(
+        `${url}/v1/query`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            type: 'select',
+            args: {
+              table: {
+                name: 'hdb_table',
+                schema: 'hdb_catalog',
+              },
+              columns: ['*.*'],
+              where: {
+                table_schema: 'public',
+              },
+            },
+          })
+        }
+      );
+      const dbTables = await resp.json();
+      let found = false;
+      tables.forEach((table) => {
+        if(dbTables.find((dbTable) => dbTable.table_name === table.name)) {
+          found = true;
+          cli.action.stop('Error');
+          console.log('Message: Your JSON database contains tables that already exist in Postgres. Please use the flag "--overwrite" to overwrite them.');
+          process.exit(1);
+        }
+      });
+      if (!found) {
+        cli.action.stop('Done!');
+        cli.action.start('Creating tables');
+        await runSql(sql, url, headers);
+      }
+    } catch (e) {
+      console.log('Unexpected: ', e);
+      process.exit(1);
+    }
   }
 };
 

@@ -66,7 +66,8 @@ const createRelationships = async (tables, url, headers) => {
   );
   if (resp.status !== 200) {
     const error = await resp.json();
-    throw error;
+    console.log(JSON.stringify(error, null, 2));
+    process.exit(1);
   }
 };
 

@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const {CLIError} = require('@oclif/errors');
+const {cli} = require('cli-ux');
 
 const trackTables = async (tables, url, headers) => {
   const bulkQueryArgs = [];
@@ -26,7 +27,9 @@ const trackTables = async (tables, url, headers) => {
   );
   if (resp.status !== 200) {
     const error = await resp.json();
-    throw new CLIError(error);
+    cli.action.stop('error');
+    console.log(JSON.stringify(error, null, 2));
+    process.exit(1);
   }
 };
 

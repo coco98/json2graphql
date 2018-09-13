@@ -73,11 +73,11 @@ const insertData = async (insertOrder, sampleData, tables, url, headers) => {
       variables,
       headers,
     });
-    cli.action.stop('Done');
-    console.log(JSON.stringify(response.data, null, 2));
+    cli.action.stop('Done!');
   } catch (e) {
     cli.action.stop('Error');
-    throw new CLIError(JSON.stringify(e, null, 2));
+    console.log(JSON.stringify(e, null, 2));
+    process.exit(1);
   }
 };
 

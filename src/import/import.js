@@ -8,9 +8,11 @@ const {createRelationships} = require('./relationships');
 const {createTables} = require('./check');
 
 const importData = async (db, url, headers, overwrite) => {
+  cli.action.start('Processing JSON data');
   const tables = generate(db);
   const sql = generateSql(tables);
-  cli.action.start('Creating tables');
+  cli.action.stop('Done!');
+  cli.action.start('Checking database');
   createTables(tables, url, headers, overwrite, runSql, sql).then(() => {
     cli.action.stop('Done!');
     cli.action.start('Tracking tables');
@@ -24,9 +26,7 @@ const importData = async (db, url, headers, overwrite) => {
         insertData(insertOrder, db, tables, url, headers);
       });
     });
-  }).catch(err => {
-    throw new CLIError(JSON.stringify(err, null, 2));
-  });
+  })
 };
 
 module.exports = importData;

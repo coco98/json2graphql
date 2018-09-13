@@ -1,5 +1,7 @@
 const {Command, flags} = require('@oclif/command');
+const fetch = require('node-fetch');
 const {CLIError} = require('@oclif/errors');
+const {cli} = require('cli-ux');
 const importData = require('./import/import');
 const resolve = require('path').resolve;
 
@@ -23,11 +25,16 @@ class JSON2GraphQL extends Command {
     }
     const dbJson = this.getDbJson(db);
     const headers = key ? {'x-hasura-access-key': key} : {};
-    try {
+    const urlVerification = await this.verifyUrl(safeUrl, headers);
+    if (urlVerification.error) {
+      cli.action.stop('Error')
+      console.log('Message: ', urlVerification.message);
+      process.exit
+    } else {
+      cli.action.stop('Done!');
       await importData(dbJson, safeUrl, headers, overwrite);
-    } catch (e) {
-      throw new CLIError('Error : ', e);
     }
+      
   }
 
   getDbJson(db) {
@@ -37,6 +44,22 @@ class JSON2GraphQL extends Command {
   getSafeUrl(url) {
     const urlLength = url.length;
     return url[urlLength - 1] === '/' ? url.slice(0, -1) : url;
+  }
+
+  async verifyUrl(url, headers) {
+    try {
+      cli.action.start('Verifying URL');
+      const resp = await fetch(
+        `${url}/v1/version`,
+        {
+          method: 'GET',
+          headers
+        }
+      );
+      return resp.status === 200 ? {error: false} : { error: true, message: 'invalid access key'};
+    } catch (e) {
+      return  { error: true, message: 'invalid URL'}
+    }
   }
 }
 

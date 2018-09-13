@@ -22,7 +22,9 @@ const runSql = async (sqlArray, url, headers) => {
   );
   if (resp.status !== 200) {
     const error = await resp.json();
-    throw new CLIError(JSON.stringify(error, null, 2));
+    cli.action.stop('Error');
+    console.log(JSON.stringify(error, null, 2));
+    process.exit(1);
   }
 };
 
