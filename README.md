@@ -1,3 +1,9 @@
+# Archived Notice
+
+This repo has been moved to [hasura/graphql-engine](https://github.com/hasura/graphql-engine/tree/master/community/tools/json2graphql).
+
+---
+
 # JSON database to GraphQL
 
 [Hasura GraphQL Engine](https://hasura.io) gives instant GraphQL APIs over Postgres.
