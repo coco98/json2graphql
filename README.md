@@ -1,4 +1,4 @@
-# Archived Notice
+# Important: This repo has been archived
 
 This repo has been moved to [hasura/graphql-engine](https://github.com/hasura/graphql-engine/tree/master/community/tools/json2graphql).
 
